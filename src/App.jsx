@@ -1012,6 +1012,7 @@ function Stack() {
   );
 }
 
+
 function Contact() {
   const [form, setForm] = useState({
     name: "",
@@ -1020,40 +1021,54 @@ function Contact() {
     budget: "",
     message: "",
   });
+
+  const [status, setStatus] = useState({
+    type: "",
+    message: "",
+  });
+
   const [sending, setSending] = useState(false);
-  const [status, setStatus] = useState({ type: "", message: "" });
 
   const updateForm = (event) => {
     const { name, value } = event.target;
-    setForm((previous) => ({ ...previous, [name]: value }));
+
+    setForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    if (status.message) {
+      setStatus({ type: "", message: "" });
+    }
   };
 
-  const submitForm = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (sending) return;
-
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-    if (!serviceId || !templateId || !publicKey) {
-      setStatus({
-        type: "error",
-        message: "Email service is not configured. Please email me directly.",
-      });
-      return;
-    }
 
     setSending(true);
     setStatus({ type: "", message: "" });
 
     try {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error("Email configuration is missing.");
+      }
+
       await emailjs.send(
         serviceId,
         templateId,
         {
+          from_name: form.name,
+          from_email: form.email,
+          reply_to: form.email,
           name: form.name,
           email: form.email,
+          project_type: form.projectType,
           projectType: form.projectType,
           budget: form.budget,
           message: form.message,
@@ -1063,7 +1078,7 @@ function Contact() {
 
       setStatus({
         type: "success",
-        message: "Your message has been sent successfully.",
+        message: "Thank you! Your message has been sent successfully.",
       });
 
       setForm({
@@ -1074,10 +1089,12 @@ function Contact() {
         message: "",
       });
     } catch (error) {
-      console.error("EmailJS error:", error);
+      console.error("EmailJS submission failed:", error);
+
       setStatus({
         type: "error",
-        message: "Message could not be sent. Please email me directly.",
+        message:
+          "Your message could not be sent. Please try again or email me directly.",
       });
     } finally {
       setSending(false);
@@ -1085,112 +1102,220 @@ function Contact() {
   };
 
   return (
-    <section className="contact section-pad" id="contact">
-      <div className="contact-orb" />
-
-      <div className="section-kicker">
-        <span>06 / GET IN TOUCH</span>
-        <span>LET&apos;S CREATE SOMETHING</span>
+    <section className="contact-editorial section-pad" id="contact">
+      <div className="contact-editorial-kicker">
+        <span>08 / CONTACT</span>
+        <span>OPEN TO SELECT PROJECTS</span>
       </div>
 
-      <div className="contact-content">
-        <p className="eyebrow">HAVE AN IDEA?</p>
-
-        <h2>
-          LET&apos;S
-          <br />
-          BUILD <span>IT.</span>
-        </h2>
-
-        <p className="contact-desc">
-          Have a website, mobile app, or software project in mind? Share a
-          little about your idea and let&apos;s discuss the possibilities.
+      <div className="contact-editorial-intro">
+        <p className="contact-editorial-eyebrow">
+          HAVE SOMETHING IN MIND?
         </p>
 
-        <a className="text-link" href="mailto:samihakhan569@gmail.com">
-          <Mail size={15} />
-          SAMIHAKHAN569@GMAIL.COM
-          <ArrowUpRight size={15} />
+        <h2>
+          LET'S MAKE
+          <br />
+          <span>IT WORK.</span>
+        </h2>
+
+        <p className="contact-editorial-description">
+          Thoughtful ideas deserve thoughtful execution. Tell me
+          what you're building, and let's discuss how I can help.
+        </p>
+
+        <a
+          className="contact-editorial-email"
+          href="mailto:samihakhan569@gmail.com"
+        >
+          <span>Prefer email?</span>
+          <span className="contact-editorial-email-address">
+            samihakhan569@gmail.com
+          </span>
+          <ArrowUpRight size={17} />
         </a>
+      </div>
 
-        <form className="inquiry-form" onSubmit={submitForm}>
-          <label htmlFor="contact-name">YOUR NAME</label>
-          <input
-            id="contact-name"
-            name="name"
-            placeholder="Enter your name"
-            value={form.name}
-            onChange={updateForm}
-            autoComplete="name"
-            required
-          />
+      <div className="contact-editorial-divider" />
 
-          <label htmlFor="contact-email">EMAIL ADDRESS</label>
-          <input
-            id="contact-email"
-            name="email"
-            type="email"
-            placeholder="you@example.com"
-            value={form.email}
-            onChange={updateForm}
-            autoComplete="email"
-            required
-          />
+      <div className="contact-editorial-main">
+        <div className="contact-editorial-side">
+          <span className="contact-editorial-number">01 — 02</span>
 
-          <label htmlFor="contact-project">PROJECT TYPE</label>
-          <select
-            id="contact-project"
-            name="projectType"
-            value={form.projectType}
-            onChange={updateForm}
-            required
-          >
-            <option value="" disabled>
-              Select a project type
-            </option>
-            <option value="Web Development">Web Development</option>
-            <option value="Mobile Application">Mobile Application</option>
-            <option value="Backend and API">Backend & API</option>
-            <option value="Business Software">Business Software</option>
-            <option value="Other">Other</option>
-          </select>
+          <h3>
+            START A
+            <br />
+            CONVERSATION.
+          </h3>
 
-          <label htmlFor="contact-budget">ESTIMATED BUDGET</label>
-          <select
-            id="contact-budget"
-            name="budget"
-            value={form.budget}
-            onChange={updateForm}
-          >
-            <option value="" disabled>
-              Select a budget range
-            </option>
-            <option value="Not decided">Not decided</option>
-            <option value="Under PKR 25000">Under PKR 25,000</option>
-            <option value="PKR 25000-50000">PKR 25,000–50,000</option>
-            <option value="PKR 50000-100000">PKR 50,000–100,000</option>
-            <option value="Above PKR 100000">Above PKR 100,000</option>
-          </select>
+          <p>
+            Share a little about your idea, goals, or the problem
+            you want to solve. I'll get back to you about the next
+            steps.
+          </p>
 
-          <label htmlFor="contact-message">YOUR MESSAGE</label>
-          <textarea
-            id="contact-message"
-            name="message"
-            rows={5}
-            placeholder="Tell me a little about your idea..."
-            value={form.message}
-            onChange={updateForm}
-            required
-          />
+         
+<div className="contact-editorial-socials">
+  <a
+    href="https://www.linkedin.com/in/samiha-khan-b606a12ba/"
+    target="_blank"
+    rel="noreferrer"
+  >
+    LinkedIn <ArrowUpRight size={14} />
+  </a>
 
-          <button className="contact-button" type="submit" disabled={sending}>
-            {sending ? "SENDING..." : "SEND YOUR MESSAGE"}
-            <ArrowUpRight size={16} />
-          </button>
+  <a
+    href="https://github.com/Samiha-png"
+    target="_blank"
+    rel="noreferrer"
+  >
+    GitHub <ArrowUpRight size={14} />
+  </a>
+
+  <a
+    href="https://www.instagram.com/_skaesthetic?utm_source=ig_web_button_share_sheet&obrf=ZDNlZDc0MzIxNw=="
+    target="_blank"
+    rel="noreferrer"
+  >
+    Instagram <ArrowUpRight size={14} />
+  </a>
+
+  <a
+    href="https://contra.com/samiha_khan_8jrb7mla?referralExperimentNid=DEFAULT_REFERRAL_PROGRAM&referrerUsername=samiha_khan_8jrb7mla"
+    target="_blank"
+    rel="noreferrer"
+  >
+    Contra <ArrowUpRight size={14} />
+  </a>
+
+</div>
+
+        </div>
+
+        <form
+          className="contact-editorial-form"
+          onSubmit={handleSubmit}
+        >
+          <div className="contact-editorial-form-heading">
+            <span>02 — PROJECT ENQUIRY</span>
+            <span>* REQUIRED FIELDS</span>
+          </div>
+
+          <div className="contact-editorial-fields">
+            <div className="contact-editorial-field">
+              <label htmlFor="contact-name">YOUR NAME *</label>
+              <input
+                id="contact-name"
+                type="text"
+                name="name"
+                placeholder="Full name"
+                value={form.name}
+                onChange={updateForm}
+                autoComplete="name"
+                maxLength={100}
+                required
+              />
+            </div>
+
+            <div className="contact-editorial-field">
+              <label htmlFor="contact-email">EMAIL ADDRESS *</label>
+              <input
+                id="contact-email"
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={updateForm}
+                autoComplete="email"
+                maxLength={254}
+                required
+              />
+            </div>
+
+            <div className="contact-editorial-field">
+              <label htmlFor="contact-project-type">
+                WHAT ARE YOU BUILDING? *
+              </label>
+
+              <select
+                id="contact-project-type"
+                name="projectType"
+                value={form.projectType}
+                onChange={updateForm}
+                required
+              >
+                <option value="" disabled>
+                  Select project type
+                </option>
+                <option value="Website Development">
+                  Website Development
+                </option>
+                <option value="Web Application">
+                  Web Application
+                </option>
+                <option value="Mobile Application">
+                  Mobile Application
+                </option>
+                <option value="ERP or Business System">
+                  ERP / Business System
+                </option>
+                <option value="API or Backend">
+                  API / Backend
+                </option>
+                <option value="Other">Something else</option>
+              </select>
+            </div>
+
+            <div className="contact-editorial-field">
+              <label htmlFor="contact-budget">PROJECT SCALE *</label>
+
+              <select
+                id="contact-budget"
+                name="budget"
+                value={form.budget}
+                onChange={updateForm}
+                required
+              >
+                <option value="" disabled>
+                  Select project scale
+                </option>
+                <option value="Small Project">
+                  Small — landing page or focused feature
+                </option>
+                <option value="Medium Project">
+                  Medium — website or application
+                </option>
+                <option value="Large Project">
+                  Large — multi-module business system
+                </option>
+                <option value="Enterprise Project">
+                  Enterprise — complex solution
+                </option>
+                <option value="Not decided">Not sure yet</option>
+              </select>
+            </div>
+
+            <div className="contact-editorial-field contact-editorial-field-full">
+              <label htmlFor="contact-message">TELL ME ABOUT IT *</label>
+              <textarea
+                id="contact-message"
+                name="message"
+                placeholder="What do you want to build? What should it achieve?"
+                value={form.message}
+                onChange={updateForm}
+                rows={4}
+                maxLength={5000}
+                required
+              />
+              <span className="contact-editorial-character-count">
+                {form.message.length} / 5000
+              </span>
+            </div>
+          </div>
 
           {status.message && (
             <p
-              className={`form-status ${status.type}`}
+              className={`contact-editorial-status is-${status.type}`}
               role="status"
               aria-live="polite"
             >
@@ -1198,36 +1323,26 @@ function Contact() {
             </p>
           )}
 
-          <p className="form-note">
-            Your details will be used to respond to your inquiry.
-          </p>
+          <div className="contact-editorial-submit-row">
+            <p>Usually best to start with a clear idea and a conversation.</p>
+
+            <button
+              type="submit"
+              className="contact-editorial-submit"
+              disabled={sending}
+            >
+              <span>
+                {sending ? "SENDING..." : "SEND ENQUIRY"}
+              </span>
+              {!sending && <ArrowUpRight size={17} />}
+            </button>
+          </div>
         </form>
       </div>
 
-      <div className="contact-bottom">
-        <span>HAVE A GREAT IDEA? LET&apos;S TALK.</span>
-
-        <div className="socials">
-          <a
-            href="https://github.com/Samiha-png"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile"
-          >
-            <Github />
-          </a>
-          <a
-            href="https://linkedin.com/in/samiha-khan-b606a12ba"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
-          >
-            <Linkedin />
-          </a>
-          <a href="mailto:samihakhan569@gmail.com" aria-label="Send email">
-            <Mail />
-          </a>
-        </div>
+      <div className="contact-editorial-bottom">
+        <span>SAMIHA KHAN / FULL-STACK DEVELOPER</span>
+        <a href="#home">BACK TO TOP ↑</a>
       </div>
     </section>
   );
