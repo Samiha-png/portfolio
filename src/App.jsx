@@ -1,5 +1,10 @@
 
-import React, { useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import emailjs from "@emailjs/browser";
 import {
   ArrowDown,
@@ -20,76 +25,222 @@ import samihaAvatar from "./assets/samiha-avatar.png";
 
 const projects = [
   {
+    id: "ai-study",
     title: "AI Study Web App",
     category: "01 / AI & EDUCATION",
+    status: "Concept brief",
     description:
-      "An AI-focused study platform concept designed to support students with a more organized digital learning experience and technology-assisted study workflows.",
+      "A study platform concept focused on organizing digital learning and technology-assisted study workflows.",
     theme: "project-lime",
     wordmark: "STUDY AI",
     tech: ["React", "JavaScript", "AI"],
+    overview:
+      "An AI-focused study platform concept designed to give students a more organized digital learning experience.",
+    problem:
+      "Students may need a more structured way to organize their digital study activities. The exact user research and problem validation for this project have not yet been documented.",
+    solution:
+      "The proposed direction is a centralized learning experience with an emphasis on organized study workflows and technology-assisted learning.",
+    features: [
+      "Digital learning experience",
+      "Organized study workflow concept",
+      "Technology-assisted study direction",
+    ],
+    role:
+      "Role, individual contributions, and implemented functionality need to be documented from the actual project.",
+    challenges:
+      "Specific development challenges and how they were resolved have not yet been supplied.",
+    screenshots: [],
   },
   {
+    id: "hotel-management",
     title: "Luxury Hotel Management",
     category: "02 / MANAGEMENT",
+    status: "Concept brief",
     description:
-      "A hotel management application concept focused on organizing guest information, reservations, room availability, and essential hotel operations in one digital workspace.",
+      "A hotel management application concept for organizing guest information, reservations, room availability, and hotel operations.",
     theme: "project-cream",
     wordmark: "LUXE STAY",
     tech: ["Web App", "Dashboard"],
+    overview:
+      "A hotel management application concept centered on bringing essential hotel information into one digital workspace.",
+    problem:
+      "Hotel operations can involve multiple types of information, including guests, reservations, and room availability. Project-specific research has not been documented.",
+    solution:
+      "The proposed solution is a centralized management interface for organizing the main areas of hotel operations.",
+    features: [
+      "Guest information management as a project focus",
+      "Reservation organization as a project focus",
+      "Room availability as a project focus",
+      "Centralized hotel operations dashboard concept",
+    ],
+    role:
+      "The exact screens, modules, and functionality personally implemented need to be confirmed.",
+    challenges:
+      "Specific technical challenges and verified resolutions have not yet been documented.",
+    screenshots: [],
   },
   {
+    id: "online-tutor",
     title: "Online Tutor Platform",
     category: "03 / EDUCATION",
+    status: "Concept brief",
     description:
-      "An online tutoring platform concept built around a structured digital learning experience for students seeking tutoring and educational support.",
+      "An online tutoring platform concept focused on a structured digital learning experience.",
     theme: "project-pink",
     wordmark: "TUTORLY",
     tech: ["Web Development", "UI"],
+    overview:
+      "A digital tutoring platform concept intended to provide a structured online learning experience for students.",
+    problem:
+      "Students seeking tutoring may benefit from a clear and organized digital learning experience. Specific user research has not been provided.",
+    solution:
+      "The proposed direction is an online platform focused on presenting tutoring and educational support in a structured way.",
+    features: [
+      "Online tutoring experience concept",
+      "Student-focused learning interface",
+      "Structured educational support direction",
+    ],
+    role:
+      "Personal contributions and completed functionality need to be added based on the actual project.",
+    challenges:
+      "Project-specific development challenges and learnings have not yet been documented.",
+    screenshots: [],
   },
   {
+    id: "business-erp",
     title: "Business ERP Dashboard",
     category: "04 / BUSINESS SOFTWARE",
+    status: "Concept brief",
     description:
-      "A business software concept for organizing operational records and presenting business information through a centralized management dashboard.",
+      "A business software concept for organizing operational records and presenting business information through a centralized dashboard.",
     theme: "project-blue",
     wordmark: "CORE ERP",
     tech: ["ERP", "Database"],
+    overview:
+      "A business dashboard concept focused on presenting operational information in one centralized management workspace.",
+    problem:
+      "Business information can be spread across different records and workflows. The specific business requirements for this project have not been supplied.",
+    solution:
+      "The proposed approach is a centralized dashboard for organizing operational records and making business information easier to navigate.",
+    features: [
+      "Centralized dashboard concept",
+      "Operational record organization",
+      "Business information overview",
+    ],
+    role:
+      "The actual modules developed, database work completed, and individual contribution need to be confirmed.",
+    challenges:
+      "Verified technical challenges, data models, and implementation decisions have not yet been documented.",
+    screenshots: [],
   },
   {
+    id: "she-shield",
     title: "She Shield",
     category: "05 / MOBILE APPLICATION",
+    status: "Concept brief",
     description:
-      "A women’s safety application concept focused on accessible safety-related features and a straightforward mobile user experience.",
+      "A women's safety application concept focused on accessible safety-related features and a straightforward mobile experience.",
     theme: "project-pink",
     wordmark: "SHE SHIELD",
     tech: ["Flutter", "Mobile"],
+    overview:
+      "A mobile application concept centered on presenting safety-related functionality through a straightforward user experience.",
+    problem:
+      "Safety-related mobile experiences need to make their intended functions understandable and accessible. Project-specific user research has not been supplied.",
+    solution:
+      "The proposed direction is a focused mobile interface for presenting safety-related features clearly.",
+    features: [
+      "Safety-focused mobile application concept",
+      "Accessible feature presentation",
+      "Straightforward mobile user experience",
+    ],
+    role:
+      "Implemented screens, technical integrations, and personal contributions need to be confirmed from the project.",
+    challenges:
+      "Specific development challenges and verified safety-related functionality have not been documented.",
+    screenshots: [],
   },
   {
+    id: "rest-api-hub",
     title: "RESTful API Hub",
     category: "06 / BACKEND",
+    status: "Concept brief",
     description:
       "A backend development project focused on structured API endpoints, data exchange, and connecting application services.",
     theme: "project-blue",
     wordmark: "API HUB",
     tech: ["REST API", "Backend"],
+    overview:
+      "A backend project brief focused on API structure and communication between application services.",
+    problem:
+      "Applications often need a structured way to exchange data and communicate with services. The specific endpoints and requirements for this project have not been provided.",
+    solution:
+      "The intended direction is to organize API endpoints and data exchange around a clear backend service structure.",
+    features: [
+      "Structured API endpoint focus",
+      "Application data exchange",
+      "Backend service integration direction",
+    ],
+    role:
+      "Actual endpoints, authentication methods, database integrations, and testing work need to be confirmed.",
+    challenges:
+      "Specific API design challenges, security decisions, and test results have not been documented.",
+    screenshots: [],
   },
   {
+    id: "networking-platform",
     title: "Networking Platform",
     category: "07 / WEB APPLICATION",
+    status: "Concept brief",
     description:
       "A networking platform concept designed around digital connections, information sharing, and a streamlined user experience.",
     theme: "project-lime",
     wordmark: "CONNECT",
     tech: ["Web App", "Frontend"],
+    overview:
+      "A web application concept focused on digital connections and information sharing through a streamlined interface.",
+    problem:
+      "A networking experience needs a clear way to present connections and shared information. The exact target audience and requirements have not been supplied.",
+    solution:
+      "The proposed direction is a web interface that organizes connection-related information in a clear and usable way.",
+    features: [
+      "Digital networking concept",
+      "Information-sharing direction",
+      "Streamlined web interface",
+    ],
+    role:
+      "The actual pages, workflows, and functionality implemented need to be confirmed.",
+    challenges:
+      "Project-specific design and development challenges have not yet been documented.",
+    screenshots: [],
   },
   {
+    id: "business-websites",
     title: "Business Website Concepts",
     category: "08 / WEB DEVELOPMENT",
+    status: "Concept collection",
     description:
-      "A collection of business website concepts exploring responsive layouts, visual identity, clear content hierarchy, and modern website interfaces.",
+      "A collection of website concepts exploring responsive layouts, visual identity, content hierarchy, and modern interfaces.",
     theme: "project-cream",
     wordmark: "STUDIO WEB",
     tech: ["React", "CSS", "Responsive"],
+    overview:
+      "A collection of business website concepts exploring how layout, visual identity, and content structure shape the browsing experience.",
+    problem:
+      "Businesses need websites that present information clearly across screen sizes. Individual client briefs and requirements have not been supplied.",
+    solution:
+      "The collection focuses on exploring responsive layout patterns, visual identity, and content hierarchy.",
+    features: [
+      "Responsive layout exploration",
+      "Visual identity concepts",
+      "Content hierarchy",
+      "Modern website interface concepts",
+    ],
+    role:
+      "The individual websites, completed pages, and specific implementation work should be listed once confirmed.",
+    challenges:
+      "Specific project challenges and verified outcomes have not yet been documented.",
+    screenshots: [],
   },
 ];
 
@@ -153,13 +304,14 @@ const technologies = [
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const links = [
-    ["About", "#about"],
-    ["Services", "#services"],
-    ["Work", "#projects"],
-    ["Stack", "#stack"],
-    ["Contact", "#contact"],
-  ];
+const links = [
+  ["About", "#about"],
+  ["Services", "#services"],
+  ["Work", "#projects"],
+  ["Experience", "#experience"],
+  ["Stack", "#stack"],
+  ["Contact", "#contact"],
+];
 
   return (
     <header className="nav-wrap">
@@ -404,47 +556,234 @@ function Services() {
     </section>
   );
 }
-
 function ProjectModal({ project, onClose }) {
-  React.useEffect(() => {
+  const dialogRef = useRef(null);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
     if (!project) return undefined;
 
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+
+      const items = Array.from(focusable);
+      if (!items.length) return;
+
+      const first = items[0];
+      const last = items[items.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (
+        !event.shiftKey &&
+        document.activeElement === last
+      ) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
-    const oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = oldOverflow;
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+
+      if (previousFocus instanceof HTMLElement) {
+        previousFocus.focus();
+      }
     };
   }, [project, onClose]);
 
+  useEffect(() => {
+    if (!project) return;
+
+    // Keep the dialog content at the top when another project is opened.
+    dialogRef.current?.scrollTo({ top: 0 });
+  }, [project]);
+
   if (!project) return null;
 
+  const sections = [
+    {
+      number: "01",
+      title: "Project overview",
+      content: project.overview,
+    },
+    {
+      number: "02",
+      title: "Problem space",
+      content: project.problem,
+    },
+    {
+      number: "03",
+      title: "Solution approach",
+      content: project.solution,
+    },
+  ];
+
   return (
-    <div className="project-modal-overlay" onClick={onClose}>
+    <div
+      className="case-overlay"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
       <section
-        className="project-modal"
+        ref={dialogRef}
+        className="case-dialog"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="project-modal-title"
-        onClick={(event) => event.stopPropagation()}
+        aria-labelledby="case-title"
+        tabIndex={-1}
       >
-        <button
-          type="button"
-          className="project-modal-close"
-          onClick={onClose}
-          aria-label="Close project description"
-        >
-          <X size={20} />
-        </button>
+        <div className={`case-hero ${project.theme}`}>
+          <div className="case-hero-top">
+            <span>SK / PROJECT ARCHIVE</span>
+            <span>{project.category}</span>
+          </div>
 
-        <h3 id="project-modal-title">{project.title}</h3>
-        <p>{project.description}</p>
+          <button
+            ref={closeButtonRef}
+            className="case-close"
+            type="button"
+            onClick={onClose}
+            aria-label="Close case study"
+          >
+            <X size={21} />
+          </button>
+
+          <div className="case-hero-content">
+            <span className="case-status">{project.status}</span>
+            <p className="case-wordmark">{project.wordmark}</p>
+            <h2 id="case-title">{project.title}</h2>
+            <p>{project.description}</p>
+          </div>
+
+          <div className="case-hero-bottom">
+            <span>CASE STUDY</span>
+            <span>PROJECT {project.id.toUpperCase()}</span>
+          </div>
+        </div>
+
+        <div className="case-body">
+          <div className="case-tech-row">
+            <div>
+              <span className="case-label">TECHNOLOGY STACK</span>
+              <div className="tags case-tags">
+                {project.tech.map((technology) => (
+                  <span key={technology}>{technology}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="case-confidential">
+              <Code2 size={17} />
+              <span>Source code not published</span>
+            </div>
+          </div>
+
+          {sections.map((section) => (
+            <section className="case-section" key={section.number}>
+              <span className="case-section-number">
+                {section.number} / CASE STUDY
+              </span>
+              <h3>{section.title}</h3>
+              <p>{section.content}</p>
+            </section>
+          ))}
+
+          <section className="case-section">
+            <span className="case-section-number">04 / SCOPE</span>
+            <h3>Key features & project focus</h3>
+            <p className="case-muted">
+              The following points describe the project brief, not verified
+              production features. Update this list to reflect the actual
+              implementation.
+            </p>
+
+            <ul className="case-feature-list">
+              {project.features.map((feature, index) => (
+                <li key={feature}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="case-section">
+            <span className="case-section-number">05 / CONTRIBUTION</span>
+            <h3>My role</h3>
+            <p>{project.role}</p>
+          </section>
+
+          <section className="case-section">
+            <span className="case-section-number">06 / LEARNINGS</span>
+            <h3>Challenges & learnings</h3>
+            <p>{project.challenges}</p>
+          </section>
+
+          <section className="case-section case-screenshots">
+            <span className="case-section-number">07 / VISUAL ARCHIVE</span>
+            <h3>Project screenshots</h3>
+            <p>
+              Interface previews will appear here when genuine project
+              screenshots are added.
+            </p>
+
+            {project.screenshots?.length > 0 ? (
+              <div className="case-image-grid">
+                {project.screenshots.map((screenshot) => (
+                  <figure key={screenshot.src}>
+                    <img
+                      src={screenshot.src}
+                      alt={screenshot.alt}
+                      loading="lazy"
+                    />
+                    {screenshot.caption && (
+                      <figcaption>{screenshot.caption}</figcaption>
+                    )}
+                  </figure>
+                ))}
+              </div>
+            ) : (
+              <div className="case-screenshot-placeholder">
+                <div className="case-placeholder-icon">
+                  <Code2 size={27} />
+                </div>
+                <strong>Project preview coming soon</strong>
+                <span>
+                  Add real screenshots from this project to display them here.
+                </span>
+              </div>
+            )}
+          </section>
+
+          <div className="case-end">
+            <span>HAVE A SIMILAR PROJECT?</span>
+            <a href="#contact" onClick={onClose}>
+              LET&apos;S TALK <ArrowUpRight size={16} />
+            </a>
+          </div>
+        </div>
       </section>
     </div>
   );
@@ -452,6 +791,15 @@ function ProjectModal({ project, onClose }) {
 
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [showAllProjects, setShowAllProjects] = useState(false);
+
+  const closeProjectModal = useCallback(() => {
+    setSelectedProject(null);
+  }, []);
+
+  const visibleProjects = showAllProjects
+    ? projects
+    : projects.filter((project) => project.featured);
 
   return (
     <section className="projects section-pad" id="projects">
@@ -466,85 +814,121 @@ function Projects() {
           <br />
           <span>WORK.</span>
         </h2>
+
         <p>
-          A selection of projects across web development, mobile applications,
-          and business software. Select a card to read its description.
+          Explore selected project briefs, technical direction, and
+          development ideas. Open a case study to learn more about
+          the project&apos;s goals, proposed approach, and scope.
         </p>
       </div>
 
       <div className="project-list">
-        {projects.map((project, index) => (
-          <button
-            className="project-card"
-            type="button"
-            key={project.title}
-            onClick={() => setSelectedProject(project)}
-            aria-label={`Read about ${project.title}`}
-            style={{
-              width: "100%",
-              padding: 0,
-              color: "inherit",
-              textAlign: "left",
-              cursor: "pointer",
-              font: "inherit",
-            }}
-          >
-            <div className={`project-art ${project.theme}`}>
-              <div className="art-top">
-                <span>SK / DIGITAL STUDIO</span>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-              </div>
+        {visibleProjects.map((project) => {
+          const originalIndex = projects.findIndex(
+            (item) => item.id === project.id
+          );
 
-              <div className="art-shape shape-a" />
-              <div className="art-shape shape-b" />
-
-              <div className="art-lines">
-                <i />
-                <i />
-                <i />
-              </div>
-
-              <div className="art-wordmark">{project.wordmark}</div>
-
-              <div className="art-bottom">
-                <span>SELECTED PROJECT</span>
-                <span>OPEN DESCRIPTION ↗</span>
-              </div>
-            </div>
-
-            <div className="project-info">
-              <div className="project-meta">
-                <span>{project.category}</span>
-                <span className="project-index">
-                  {String(index + 1).padStart(2, "0")} / 08
-                </span>
-              </div>
-
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-
-              <div className="project-footer">
-                <div className="tags">
-                  {project.tech.map((tech) => (
-                    <span key={tech}>{tech}</span>
-                  ))}
+          return (
+            <button
+              className="project-card"
+              type="button"
+              key={project.id}
+              onClick={() => setSelectedProject(project)}
+              aria-label={`Open case study: ${project.title}`}
+              style={{
+                width: "100%",
+                padding: 0,
+                color: "inherit",
+                textAlign: "left",
+                cursor: "pointer",
+                font: "inherit",
+              }}
+            >
+              <div className={`project-art ${project.theme}`}>
+                <div className="art-top">
+                  <span>SK / DIGITAL STUDIO</span>
+                  <span>
+                    {String(originalIndex + 1).padStart(2, "0")}
+                  </span>
                 </div>
-                <span className="project-link" aria-hidden="true">
-                  <ArrowUpRight size={17} />
+
+                <div className="art-shape shape-a" />
+                <div className="art-shape shape-b" />
+
+                <div className="art-lines">
+                  <i />
+                  <i />
+                  <i />
+                </div>
+
+                <div className="art-wordmark">{project.wordmark}</div>
+
+                <div className="art-bottom">
+                  <span>PROJECT CASE STUDY</span>
+                  <span>EXPLORE ↗</span>
+                </div>
+              </div>
+
+              <div className="project-info">
+                <div className="project-meta">
+                  <span>{project.category}</span>
+                  <span className="project-index">
+                    {String(originalIndex + 1).padStart(2, "0")} /{" "}
+                    {String(projects.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+
+                <div className="project-footer">
+                  <div className="tags">
+                    {project.tech.map((technology) => (
+                      <span key={technology}>{technology}</span>
+                    ))}
+                  </div>
+
+                  <span className="project-link" aria-hidden="true">
+                    <ArrowUpRight size={17} />
+                  </span>
+                </div>
+
+                <span className="project-case-link">
+                  READ CASE STUDY <ArrowUpRight size={14} />
                 </span>
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="projects-toggle-wrap">
+        <button
+          type="button"
+          className="projects-toggle"
+          onClick={() => setShowAllProjects((show) => !show)}
+          aria-expanded={showAllProjects}
+        >
+          {showAllProjects
+            ? "SHOW FEATURED PROJECTS"
+            : `VIEW ALL PROJECTS (${projects.length})`}
+
+          <ArrowDownRight
+            size={17}
+            className={showAllProjects ? "toggle-arrow is-open" : "toggle-arrow"}
+          />
+        </button>
       </div>
 
       <p className="project-disclaimer">
-        PROJECT DESCRIPTIONS REPRESENT PORTFOLIO PROJECT CONCEPTS.
+        PROJECT BRIEFS ARE PRESENTED FOR PORTFOLIO PURPOSES.
+        IMPLEMENTATION DETAILS AND FEATURES SHOULD BE VERIFIED
+        AGAINST EACH PROJECT.
       </p>
 
       <ProjectModal
         project={selectedProject}
-        onClose={() => setSelectedProject(null)}
+        onClose={closeProjectModal}
       />
     </section>
   );
